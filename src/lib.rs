@@ -43,36 +43,16 @@ impl CuteIdGenerator {
     /// # Returns
     /// A String containing the generated ID with parts joined by the separator
     pub fn generate(&mut self) -> String {
-        let mut id_parts = Vec::new();
-
-        for part in &self.parts {
-            match part {
-                IdPart::Animal => {
-                    if let Some(animal) = ANIMALS.choose(&mut self.rng) {
-                        id_parts.push(*animal);
-                    }
-                }
-                IdPart::Color => {
-                    if let Some(color) = COLORS.choose(&mut self.rng) {
-                        id_parts.push(*color);
-                    }
-                }
-                IdPart::Adjective => {
-                    if let Some(adjective) = ADJECTIVES.choose(&mut self.rng) {
-                        id_parts.push(*adjective);
-                    }
-                }
-                IdPart::Adverb => {
-                    if let Some(adverb) = ADVERBS.choose(&mut self.rng) {
-                        id_parts.push(*adverb);
-                    }
-                }
-            }
-        }
-
-        id_parts.reverse();
-
-        id_parts.join(&self.separator)
+        self.parts
+            .iter()
+            .map(|part| match part {
+                IdPart::Animal => *ANIMALS.choose(&mut self.rng).unwrap(),
+                IdPart::Color => *COLORS.choose(&mut self.rng).unwrap(),
+                IdPart::Adjective => *ADJECTIVES.choose(&mut self.rng).unwrap(),
+                IdPart::Adverb => *ADVERBS.choose(&mut self.rng).unwrap(),
+            })
+            .collect::<Vec<&str>>()
+            .join(&self.separator)
     }
 }
 
